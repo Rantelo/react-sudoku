@@ -1,5 +1,8 @@
+// webpack.config.js
+var path = require('path');
+
 module.exports = {
-  entry: './main.js',
+  entry: './src/main.js',
   output: {
     path: './',
     filename: 'index.js'
@@ -14,6 +17,11 @@ module.exports = {
         test: /\.js$/,
         exclude: /node_modules/,
         loader: 'babel'
+      },
+      {
+        test: /\.s?css$/,
+        loaders: ['style', 'css', 'sass'],
+        include: path.join(__dirname, 'src')
       }
     ]
   },

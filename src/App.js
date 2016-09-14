@@ -27,33 +27,23 @@ export default class App extends Component {
   }
 
   _handleKeyDown( event ) {
-    let { key } = event;
+    const { key }   = event;
+    const _this     = this;
+    const [x, y]    = this.state.cursor;
 
-    const cursor = this.state.cursor;
+    const plus      = number => (number >= 8) ? 0 : number + 1;
+    const minus     = number => (number <= 0) ? 8 : number - 1;
+    const setCursor = cursor => _this.setState({cursor: cursor});
 
-
-
-    if ( key === 'j' ) {
-      this.setState({
-        cursor: [cursor[0] + 1, cursor[1]]
-      });
+    if( key === 'j' || key === 'ArrowDown' ) {
+      setCursor([plus(x), y]);
+    } else if( key === 'k' || key === 'ArrowUp' ) {
+      setCursor([minus(x), y]);
+    } else if( key === 'h' || key === 'ArrowLeft' ) {
+      setCursor([x, minus(y)]);
+    } else if( key === 'l' || key === 'ArrowRight' ) {
+      setCursor([x, plus(y)]);
     }
-    if ( key === 'k' ) {
-      this.setState({
-        cursor: [cursor[0] - 1, cursor[1]]
-      });
-    }
-    if ( key === 'h' ) {
-      this.setState({
-        cursor: [cursor[0], cursor[1] - 1]
-      });
-    }
-    if ( key === 'l' ) {
-      this.setState({
-        cursor: [cursor[0], cursor[1] + 1]
-      });
-    }
-
   }
 
   componentDidMount() {

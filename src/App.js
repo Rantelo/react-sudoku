@@ -11,13 +11,19 @@ export default class App extends Component {
     };
   }
   _generateRow(arr, row) {
+    const _this = this;
+
     return (
       <div key={`row-${row}`}>
         {arr.map((element,index) => {
+          const [cx, cy] = _this.state.cursor;
+          const selected = ((cx === row) && (cy === index));
+
           return(
             <Cell
               id={`${row}-${index}`}
               key={`${row}-${index}`}
+              selected={selected}
               value={element}
               />
           );

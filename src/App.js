@@ -4,10 +4,23 @@ import Cell from './components/cell'
 export default class App extends Component {
   constructor(props) {
     super(props);
-    this._generateRow   = this._generateRow.bind(this);
-    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._generateRow    = this._generateRow.bind(this);
+    this._handleKeyDown  = this._handleKeyDown.bind(this);
+    this._setCurrentCell = this._setCurrentCell.bind(this);
+
     this.state = {
-      cursor: [0,0]
+      cursor: [0,0],
+      sudoku: [
+        [1,2,3,4,5,6,7,8,9],
+        [4,5,6,7,8,9,1,2,3],
+        [1,2,3,4,5,6,7,8,9],
+        [4,5,6,7,8,9,1,2,3],
+        [1,2,3,4,5,6,7,8,9],
+        [4,5,6,7,8,9,1,2,3],
+        [1,2,3,4,5,6,7,8,9],
+        [4,5,6,7,8,9,1,2,3],
+        [7,8,9,1,2,3,4,5,6]
+      ]
     };
   }
   _generateRow(arr, row) {
@@ -32,10 +45,17 @@ export default class App extends Component {
     )
   }
 
+  _setCurrentCell( number ) {
+    const [ x, y ] = this.state.cursor;
+    let sudoku = this.state.sudoku;
+    sudoku[x][y] = number;
+    this.setState({ sudoku });
+  }
+
   _handleKeyDown( event ) {
-    const { key }   = event;
-    const _this     = this;
-    const [x, y]    = this.state.cursor;
+    const { key }  = event;
+    const _this    = this;
+    const [ x, y ] = this.state.cursor;
 
     const plus      = number => (number >= 8) ? 0 : number + 1;
     const minus     = number => (number <= 0) ? 8 : number - 1;
@@ -49,6 +69,8 @@ export default class App extends Component {
       setCursor([x, minus(y)]);
     } else if( key === 'l' || key === 'ArrowRight' ) {
       setCursor([x, plus(y)]);
+    } else if( /[1-9]{1}/.test(key) ) {
+      this._setCurrentCell(key);
     }
   }
 
@@ -61,17 +83,7 @@ export default class App extends Component {
   }
 
   render() {
-    let sudoku = [
-      [1,2,3,4,5,6,7,8,9],
-      [4,5,6,7,8,9,1,2,3],
-      [1,2,3,4,5,6,7,8,9],
-      [4,5,6,7,8,9,1,2,3],
-      [1,2,3,4,5,6,7,8,9],
-      [4,5,6,7,8,9,1,2,3],
-      [1,2,3,4,5,6,7,8,9],
-      [4,5,6,7,8,9,1,2,3],
-      [7,8,9,1,2,3,4,5,6]
-    ];
+    const sudoku = this.state.sudoku;
     let rows = sudoku.map((row, index) => this._generateRow(row,index));
     
     let cursor = this.state.cursor;

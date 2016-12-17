@@ -1,5 +1,11 @@
 import React, { Component } from 'react';
-import Cell from './components/cell'
+import Cell from './components/cell';
+import {
+  getColumn,
+  getRow,
+  getBlock,
+  isOkToInsert
+} from './helpers';
 
 export default class App extends Component {
   constructor(props) {
@@ -7,19 +13,20 @@ export default class App extends Component {
     this._generateRow    = this._generateRow.bind(this);
     this._handleKeyDown  = this._handleKeyDown.bind(this);
     this._setCurrentCell = this._setCurrentCell.bind(this);
+    this._verifyInput    = this._verifyInput.bind(this);
 
     this.state = {
       cursor: [0,0],
       sudoku: [
-        [1,2,3,4,5,6,7,8,9],
-        [4,5,6,7,8,9,1,2,3],
-        [1,2,3,4,5,6,7,8,9],
-        [4,5,6,7,8,9,1,2,3],
-        [1,2,3,4,5,6,7,8,9],
-        [4,5,6,7,8,9,1,2,3],
-        [1,2,3,4,5,6,7,8,9],
-        [4,5,6,7,8,9,1,2,3],
-        [7,8,9,1,2,3,4,5,6]
+        [0,0,0,0,8,0,0,2,4],
+        [0,8,7,0,0,2,0,0,3],
+        [0,2,3,0,9,4,0,0,1],
+        [2,0,0,4,1,0,9,5,0],
+        [0,1,9,0,0,0,2,4,0],
+        [0,5,0,0,2,9,1,0,6],
+        [0,0,0,6,0,0,4,1,0],
+        [5,0,0,9,0,0,6,0,0],
+        [8,0,0,2,4,0,0,9,0]
       ]
     };
   }
@@ -45,10 +52,19 @@ export default class App extends Component {
     )
   }
 
+  _verifyInput() {
+    const coords = this.state.cursor;
+    const matrix = this.state.sudoku;
+
+    return isOkToInsert( coords, matrix );
+  }
+
   _setCurrentCell( number ) {
     const [ x, y ] = this.state.cursor;
-    let sudoku = this.state.sudoku;
-    sudoku[x][y] = number;
+    let sudoku     = this.state.sudoku;
+    sudoku[x][y]   = number;
+
+    this._verifyInput()
     this.setState({ sudoku });
   }
 
@@ -70,7 +86,7 @@ export default class App extends Component {
     } else if( key === 'l' || key === 'ArrowRight' ) {
       setCursor([x, plus(y)]);
     } else if( /[1-9]{1}/.test(key) ) {
-      this._setCurrentCell(key);
+      this._setCurrentCell(parseInt(key));
     }
   }
 

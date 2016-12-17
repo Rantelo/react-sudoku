@@ -12,7 +12,7 @@ export default class Cell extends Component {
       <div
         id={props.id}
         className={`cell ${selected}`} >
-        {props.value}
+        { (props.value === 0) ? '-' : props.value }
       </div>
     );
   }

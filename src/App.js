@@ -33,7 +33,7 @@ export default class App extends Component {
     const _this = this;
 
     return (
-      <div key={`row-${row}`}>
+      <div key={`row-${row}`} className='row'>
         {arr.map((element,index) => {
           const [cx, cy] = _this.state.cursor;
           const selected = ((cx === row) && (cy === index));

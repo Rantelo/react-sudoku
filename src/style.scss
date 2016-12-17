@@ -12,7 +12,24 @@ body {
   width: 30px;
   height: 30px;
   margin: 0 auto;
+  &:nth-child(3n) {
+    border-right: 3px solid black;
+  }
+  &:first-child {
+    border-left: 3px solid black;
+  }
 }
+
+.row {
+  &:nth-child(3n) {
+    border-bottom: 3px solid black;
+  }
+  &:first-child {
+    border-top: 3px solid black;
+  }
+}
+
+
 
 .selected {
   background-color: aqua;

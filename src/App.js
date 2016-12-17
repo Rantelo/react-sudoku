@@ -13,7 +13,6 @@ export default class App extends Component {
     this._generateRow    = this._generateRow.bind(this);
     this._handleKeyDown  = this._handleKeyDown.bind(this);
     this._setCurrentCell = this._setCurrentCell.bind(this);
-    this._verifyInput    = this._verifyInput.bind(this);
 
     this.state = {
       cursor: [0,0],
@@ -52,19 +51,22 @@ export default class App extends Component {
     )
   }
 
-  _verifyInput() {
-    const coords = this.state.cursor;
-    const matrix = this.state.sudoku;
+  _setCurrentCell( number ) {
+    let     sudoku = this.state.sudoku;
+    const [ x, y ] = this.state.cursor;
 
-    return isOkToInsert( coords, matrix );
+    if (isOkToInsert( number, this.state.cursor, sudoku )) {
+      sudoku[x][y]   = number;
+      this.setState({ sudoku });
+    }
   }
 
-  _setCurrentCell( number ) {
+  _eraseCell() {
+    //Add validation for not erasing original
+    let     sudoku = this.state.sudoku;
     const [ x, y ] = this.state.cursor;
-    let sudoku     = this.state.sudoku;
-    sudoku[x][y]   = number;
 
-    this._verifyInput()
+    sudoku[x][y]   = 0;
     this.setState({ sudoku });
   }
 
@@ -85,6 +87,8 @@ export default class App extends Component {
       setCursor([x, minus(y)]);
     } else if( key === 'l' || key === 'ArrowRight' ) {
       setCursor([x, plus(y)]);
+    } else if( key === 'Backspace' ) {
+      this._eraseCell();
     } else if( /[1-9]{1}/.test(key) ) {
       this._setCurrentCell(parseInt(key));
     }
